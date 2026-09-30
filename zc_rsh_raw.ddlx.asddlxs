@@ -1,0 +1,115 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'Rate Sheet - KIT',
+    typeNamePlural: 'Rate Sheet - KIT',
+    title: { type: #STANDARD, value: 'BomComponent' }
+  }
+}
+annotate view ZC_RSH_RAW with
+{
+  @UI.facet: [
+    { id: 'idRawGeneral', type: #IDENTIFICATION_REFERENCE, label: 'BOM Within BOM', position: 10 }
+  ]
+
+  @UI.hidden: true
+  RawMatCostUUID;
+  @UI.hidden: true
+  KitCostingUUID;
+  @UI.hidden: true
+  RateSheetUUID;
+
+  @UI: { lineItem: [{ position: 5, label: 'Tick' }], identification: [{ position: 5, label: 'Tick' }] }
+  IsSelectedForCosting;
+
+  @UI: { lineItem: [{ position: 10, label: 'SR NO' }], identification: [{ position: 10, label: 'SR NO' }] }
+  SrNo;
+
+  @UI: { lineItem: [{ position: 20, label: 'BOM Component' }], identification: [{ position: 20, label: 'BOM Component' }] }
+  BomComponent;
+
+  @UI: { lineItem: [{ position: 30, label: 'Vendor Code' }], identification: [{ position: 30, label: 'Vendor Code' }] }
+  VendorCode;
+
+  @UI: { lineItem: [{ position: 40, label: 'Qty' }], identification: [{ position: 40, label: 'Qty' }] }
+  Qty;
+
+  @UI: { lineItem: [{ position: 50, label: 'UOM' }], identification: [{ position: 50, label: 'UOM' }] }
+  UoM;
+
+  @UI: { lineItem: [{ position: 60, label: 'Qty Required' }], identification: [{ position: 60, label: 'Qty Required' }] }
+  QtyRequired;
+
+  @UI: { lineItem: [{ position: 70, label: 'Vendor Qty' }], identification: [{ position: 70, label: 'Vendor Qty' }] }
+  VendorOrderQty;
+
+  @UI.hidden: true
+  Currency;
+
+  @UI: { lineItem: [{ position: 80, label: 'Basic Rate' }], identification: [{ position: 80, label: 'Basic Rate' }] }
+  BasicRate;
+
+  @UI: { lineItem: [{ position: 90, label: 'IGST %' }], identification: [{ position: 90, label: 'IGST %' }] }
+  IgstPct;
+  @UI: { lineItem: [{ position: 91, label: 'IGST AMT. IN RS.' }], identification: [{ position: 91, label: 'IGST AMT. IN RS.' }] }
+  IgstAmt;
+  @UI: { lineItem: [{ position: 92, label: 'CGST %' }], identification: [{ position: 92, label: 'CGST %' }] }
+  CgstPct;
+  @UI: { lineItem: [{ position: 93, label: 'CGST AMT. IN RS.' }], identification: [{ position: 93, label: 'CGST AMT. IN RS.' }] }
+  CgstAmt;
+  @UI: { lineItem: [{ position: 94, label: 'SGST %' }], identification: [{ position: 94, label: 'SGST %' }] }
+  SgstPct;
+  @UI: { lineItem: [{ position: 95, label: 'SGST AMT. IN RS.' }], identification: [{ position: 95, label: 'SGST AMT. IN RS.' }] }
+  SgstAmt;
+  @UI: { lineItem: [{ position: 96, label: 'UGST %' }], identification: [{ position: 96, label: 'UGST %' }] }
+  UgstPct;
+  @UI: { lineItem: [{ position: 97, label: 'UGST AMT. IN RS.' }], identification: [{ position: 97, label: 'UGST AMT. IN RS.' }] }
+  UgstAmt;
+
+  @UI: { lineItem: [{ position: 100, label: 'Total Price' }], identification: [{ position: 100, label: 'Total Price' }] }
+  TaxValue;
+
+  @UI: { lineItem: [{ position: 110, label: 'Freight' }], identification: [{ position: 110, label: 'Freight' }] }
+  Freight;
+
+  @UI: { lineItem: [{ position: 120, label: 'Handling.' }], identification: [{ position: 120, label: 'Handling.' }] }
+  Handling;
+
+  @UI: { lineItem: [{ position: 130, label: 'Total Cost' }], identification: [{ position: 130, label: 'Total Cost' }] }
+  TotalCost;
+
+  @UI: { lineItem: [{ position: 140, label: 'Modvat' }], identification: [{ position: 140, label: 'Modvat' }] }
+  Modvat;
+
+  @UI: { lineItem: [{ position: 150, label: 'Net Landed' }], identification: [{ position: 150, label: 'Net Landed' }] }
+  NetLanded;
+
+  @UI: { lineItem: [{ position: 155, label: 'Local Benifit(-)' }], identification: [{ position: 155, label: 'Local Benifit(-)' }] }
+  LocalBenefit;
+
+  @UI: { lineItem: [{ position: 160, label: 'Basic Material' }], identification: [{ position: 160, label: 'Basic Material' }] }
+  BasicMaterial;
+
+  @UI: { lineItem: [{ position: 170, label: 'Colouring' }], identification: [{ position: 170, label: 'Colouring' }] }
+  Colouring;
+
+  @UI: { lineItem: [{ position: 180, label: 'Net Cost' }], identification: [{ position: 180, label: 'Net Cost' }] }
+  NetCost;
+
+  @UI: { lineItem: [{ position: 190 }], identification: [{ position: 190 }] }
+  Ze35Pct;
+
+  @UI.hidden: true
+  TaxCode;
+  @UI.hidden: true
+  InfoRecord;
+
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LastChangedAt;
+}

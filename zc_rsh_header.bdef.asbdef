@@ -1,0 +1,53 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for ZC_RSH_HEADER alias RateSheetHeader
+{
+  use create;
+  use update;
+  use delete;
+
+  use association _Item { create; with draft; }
+
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+  use action recreateRateSheet;
+  use action checkBom;
+  use action acknowledgeBomChanges;
+  use action copyFromReference;
+  use action createContract;
+  use action addMoreLine;
+  use action refreshRateSheet;
+}
+
+define behavior for ZC_RSH_ITEM alias RateSheetItem
+{
+  use update;
+  use delete;
+
+  use association _Header { with draft; }
+  use association _KitCostingItem { create; with draft; }
+}
+
+define behavior for ZC_RSH_KIT alias KitCostingItem
+{
+  use update;
+  use delete;
+
+  use association _RateSheetItem { with draft; }
+  use association _Header { with draft; }
+  use association _RawMaterialCostingItem { create; with draft; }
+}
+
+define behavior for ZC_RSH_RAW alias RawMaterialCostingItem
+{
+  use update;
+  use delete;
+
+  use association _KitCostingItem { with draft; }
+  use association _Header { with draft; }
+}

@@ -1,0 +1,287 @@
+managed implementation in class zbp_i_rsh_header unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_RSH_HEADER alias RateSheetHeader
+persistent table zrsh_hdr
+draft table zrsh_hdrd
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( instance )
+{
+  field ( readonly, numbering : managed ) RateSheetUUID;
+  field ( readonly ) RateSheetNumber, Material,
+                      RequestedQuantity, BaseUoM, Currency, PurchasingOrg, OverallStatus,
+                      RateSheetDate, BomExplodedAt, BomCheckAck,
+                      CreatedBy, CreatedAt, LastChangedBy, LastChangedAt, LocalLastChangedAt;
+  field ( mandatory : create ) PurchaseRequisition, PurchReqItem, Plant;
+  field ( readonly : update )  PurchaseRequisition, PurchReqItem, Plant;
+
+  create;
+  update;
+  delete;
+
+  association _Item { create; with draft; }
+
+  determination setDefaults           on modify { create; }
+  determination deriveFromPurchReq    on modify { create; field PurchaseRequisition, PurchReqItem; }
+  determination explodeBom            on modify { create; field Material, Plant; }
+  determination assignRateSheetNumber on save   { create; }
+
+  validation checkPurchReqStatus on save { create; field PurchaseRequisition, PurchReqItem; }
+  validation checkBomDrift       on save { field BomCheckAck; }
+
+  action recreateRateSheet         result [1] $self;
+  action checkBom                  result [1] $self;
+  action acknowledgeBomChanges     result [1] $self;
+  action copyFromReference         result [1] $self;
+  action createContract            result [1] $self;
+  // P-100: legacy ZMM_R_RATESHEET Add More Line - manual component line
+  action ( features : instance ) addMoreLine parameter ZA_RSH_ADD_LINE result [1] $self;
+  // P-102: legacy REFRESH - drop unticked vendor rows from the Price Engine
+  action ( features : instance ) refreshRateSheet result [1] $self;
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare
+  {
+    validation checkPurchReqStatus;
+    validation checkBomDrift;
+    validation RateSheetItem~checkVendorQtyAllocation;
+    validation KitCostingItem~checkKitQtyAllocation;
+  }
+
+  mapping for zrsh_hdr corresponding
+  {
+    RateSheetUUID            = rate_sheet_uuid;
+    RateSheetNumber          = rate_sheet_number;
+    PurchaseRequisition      = purchase_req;
+    PurchReqItem             = purch_req_item;
+    Plant                    = plant;
+    Material                 = material;
+    RequestedQuantity        = requested_qty;
+    BaseUoM                  = base_uom;
+    ReferenceRateSheetNumber = ref_rate_sheet;
+    OverallStatus            = overall_status;
+    Currency                 = currency;
+    PurchasingOrg            = purchasing_org;
+    RateSheetDate            = rate_sheet_date;
+    BomExplodedAt            = bom_exploded_at;
+    BomCheckAck              = bom_check_ack;
+    CreatedBy                = created_by;
+    CreatedAt                = created_at;
+    LastChangedBy            = last_changed_by;
+    LastChangedAt            = last_changed_at;
+    LocalLastChangedAt       = local_last_changed_at;
+  }
+}
+
+define behavior for ZI_RSH_ITEM alias RateSheetItem
+persistent table zrsh_itm
+draft table zrsh_itmd
+etag dependent by _Header
+lock dependent by _Header
+authorization dependent by _Header
+{
+  field ( readonly, numbering : managed ) RateSheetItemUUID;
+  field ( readonly ) RateSheetUUID, SrNo, BomStatus, ItemStatus, BomDriftStatus, ContractNo,
+                      BomUoM, BomQty, QtyRequired, TaxValue, TotalPrice, PayDay, TotalValue,
+                      AverageRate, QuotedBasicRate, IsRateFromKit, TaxCode, InfoRecord,
+                      VendorName, IsAvgRateRow, IsManualLine;
+
+  update;
+  delete;
+
+  association _Header { with draft; }
+  association _KitCostingItem { create; with draft; }
+
+  determination deriveEligibleVendors on modify { create; field VendorCode, VendorOrderQty, BasicRate, IsIncluded; }
+  determination explodeKitBom         on modify { create; }
+
+  // P-100: legacy CHECK / SAVE1 - vendor order qty vs qty required per component
+  validation checkVendorQtyAllocation on save { create; field VendorOrderQty, IsIncluded; }
+
+  // P-102: legacy SAVE1 - only ticked rows are persisted
+  determination dropUntickedRows on save { create; field IsIncluded; }
+
+  mapping for zrsh_itm corresponding
+  {
+    RateSheetItemUUID = rate_sheet_item_uuid;
+    RateSheetUUID      = rate_sheet_uuid;
+    SrNo               = sr_no;
+    BomStatus          = bom_status;
+    ContractNo         = contract_no;
+    BomComponent       = bom_component;
+    BomUoM             = bom_uom;
+    BomQty             = bom_qty;
+    QtyRequired        = qty_required;
+    VendorCode         = vendor_code;
+    VendorName         = vendor_name;
+    VendorOrderQty     = vendor_order_qty;
+    Currency           = currency;
+    BasicRate          = basic_rate;
+    IgstPct            = igst_pct;
+    IgstAmt            = igst_amt;
+    CgstPct            = cgst_pct;
+    CgstAmt            = cgst_amt;
+    SgstPct            = sgst_pct;
+    SgstAmt            = sgst_amt;
+    UgstPct            = ugst_pct;
+    UgstAmt            = ugst_amt;
+    TaxValue           = tax_value;
+    TotalPrice         = total_price;
+    PayDay             = pay_day;
+    Modvat              = modvat;
+    TotalCost           = total_cost;
+    TotalValue          = total_value;
+    AverageRate         = average_rate;
+    IsIncluded          = is_included;
+    IsManualLine        = is_manual_line;
+    ManualText          = manual_text;
+    ItemStatus          = item_status;
+    BomItemNode         = bom_item_node;
+    BomDriftStatus      = bom_drift_status;
+    QuotedBasicRate     = quoted_basic_rate;
+    IsRateFromKit       = is_rate_from_kit;
+    TaxCode             = tax_code;
+    InfoRecord          = info_record;
+    IsAvgRateRow        = is_avg_rate_row;
+    CreatedBy           = created_by;
+    CreatedAt           = created_at;
+    LastChangedBy       = last_changed_by;
+    LastChangedAt       = last_changed_at;
+  }
+}
+
+define behavior for ZI_RSH_KIT alias KitCostingItem
+persistent table zrsh_kit
+draft table zrsh_kitd
+etag dependent by _Header
+lock dependent by _Header
+authorization dependent by _Header
+{
+  field ( readonly, numbering : managed ) KitCostingUUID;
+  field ( readonly ) RateSheetItemUUID, RateSheetUUID, SrNo, BomComponent, UoM, Qty, QtyRequired,
+                      Pcwtgms, Pcwtgross, Pcwtgorssbynos, Rcost, Rcostperpc, Mcostperpc,
+                      Mcostperset, Productcostperpc, Productcostperkit, Ze31Pct, Ze32Rate,
+                      WeightFactor, HasFurtherBom, FormType, FormConditionType;
+
+  update;
+  delete;
+
+  association _RateSheetItem { with draft; }
+  association _Header { with draft; }
+  association _RawMaterialCostingItem { create; with draft; }
+
+  determination deriveKitCosting       on modify { create; field Rcost, VendorOrderQty, IsSelectedComponent; }
+  determination explodeRawMaterialBom on modify { create; }
+  determination rollUpKitToMainGrid   on modify { field Productcostperkit, IsSelectedComponent; }
+
+  // P-102: legacy USER_COMMAND1 CHECK - ticked kit qty vs qty required
+  validation checkKitQtyAllocation on save { create; field VendorOrderQty, IsSelectedComponent; }
+
+  action parkDocument result [1] $self;
+
+  mapping for zrsh_kit corresponding
+  {
+    KitCostingUUID       = kit_costing_uuid;
+    RateSheetItemUUID    = rate_sheet_item_uuid;
+    RateSheetUUID        = rate_sheet_uuid;
+    SrNo                 = sr_no;
+    BomComponent         = bom_component;
+    UoM                  = uom;
+    Qty                  = qty;
+    QtyRequired          = qty_required;
+    VendorOrderQty       = vendor_order_qty;
+    Pcwtgms              = pcwtgms;
+    Pcwtgross            = pcwtgross;
+    Pcwtgorssbynos       = pcwtgorssbynos;
+    Currency             = currency;
+    Rcost                = rcost;
+    Rcostperpc           = rcostperpc;
+    Mcostperpc           = mcostperpc;
+    Mcostperset          = mcostperset;
+    Productcostperpc     = productcostperpc;
+    Productcostperkit    = productcostperkit;
+    LocalFreight         = local_freight;
+    FormType             = form_type;
+    FormConditionType    = form_condition_type;
+    Ze31Pct              = ze31_pct;
+    Ze32Rate             = ze32_rate;
+    WeightFactor         = weight_factor;
+    HasFurtherBom        = has_further_bom;
+    IsSelectedComponent  = is_selected_component;
+    CreatedBy            = created_by;
+    CreatedAt            = created_at;
+    LastChangedBy        = last_changed_by;
+    LastChangedAt        = last_changed_at;
+  }
+}
+
+define behavior for ZI_RSH_RAW alias RawMaterialCostingItem
+persistent table zrsh_raw
+draft table zrsh_rawd
+etag dependent by _Header
+lock dependent by _Header
+authorization dependent by _Header
+{
+  field ( readonly, numbering : managed ) RawMatCostUUID;
+  field ( readonly ) KitCostingUUID, RateSheetUUID, SrNo, BomComponent, UoM, Qty, QtyRequired, BasicRate,
+                      TaxValue, Freight, Handling, TotalCost, Modvat, NetLanded, BasicMaterial,
+                      Colouring, NetCost, LocalBenefit, Ze35Pct, TaxCode, InfoRecord;
+
+  update;
+  delete;
+
+  association _KitCostingItem { with draft; }
+  association _Header { with draft; }
+
+  determination calculateRawMaterialCost on modify { create; field VendorOrderQty, IsSelectedForCosting; }
+  determination rollUpRawMaterialToKit   on modify { field NetCost, IsSelectedForCosting; }
+
+  action parkDocument result [1] $self;
+
+  mapping for zrsh_raw corresponding
+  {
+    RawMatCostUUID         = raw_mat_cost_uuid;
+    KitCostingUUID         = kit_costing_uuid;
+    RateSheetUUID          = rate_sheet_uuid;
+    SrNo                   = sr_no;
+    BomComponent           = bom_component;
+    VendorCode             = vendor_code;
+    UoM                    = uom;
+    Qty                    = qty;
+    QtyRequired            = qty_required;
+    VendorOrderQty         = vendor_order_qty;
+    Currency               = currency;
+    BasicRate              = basic_rate;
+    IgstPct                = igst_pct;
+    IgstAmt                = igst_amt;
+    CgstPct                = cgst_pct;
+    CgstAmt                = cgst_amt;
+    SgstPct                = sgst_pct;
+    SgstAmt                = sgst_amt;
+    UgstPct                = ugst_pct;
+    UgstAmt                = ugst_amt;
+    TaxValue               = tax_value;
+    Freight                = freight;
+    Handling               = handling;
+    TotalCost              = total_cost;
+    Modvat                 = modvat;
+    NetLanded              = net_landed;
+    BasicMaterial          = basic_material;
+    Colouring              = colouring;
+    NetCost                = net_cost;
+    LocalBenefit           = local_benefit;
+    Ze35Pct                = ze35_pct;
+    TaxCode                = tax_code;
+    InfoRecord             = info_record;
+    IsSelectedForCosting   = is_selected_for_costing;
+    CreatedBy              = created_by;
+    CreatedAt              = created_at;
+    LastChangedBy          = last_changed_by;
+    LastChangedAt          = last_changed_at;
+  }
+}

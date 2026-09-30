@@ -1,0 +1,83 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'Rate Sheet',
+    typeNamePlural: 'Rate Sheets',
+    title: { type: #STANDARD, value: 'RateSheetNumber' },
+    description: { type: #STANDARD, value: 'Material' }
+  }
+}
+annotate view ZC_RSH_HEADER with
+{
+  @UI.facet: [
+    { id: 'idHeader', type: #IDENTIFICATION_REFERENCE, label: 'General Information', position: 10 },
+    { id: 'idItems', purpose: #STANDARD, type: #LINEITEM_REFERENCE, label: 'Price Engine', position: 20, targetElement: '_Item' }
+  ]
+
+  // P-100: legacy ZMM_R_RATESHEET Add More Line - Object Page header action (draft only via instance features)
+  // P-102: legacy REFRESH - remove unticked rows (draft only via instance features)
+  @UI.identification: [{ type: #FOR_ACTION, dataAction: 'addMoreLine', label: 'Add More Line', position: 5 },
+                       { type: #FOR_ACTION, dataAction: 'refreshRateSheet', label: 'Refresh (remove unticked)', position: 6 }]
+  @UI.hidden: true
+  RateSheetUUID;
+
+  @UI: { lineItem: [{ position: 10, importance: #HIGH }], identification: [{ position: 10 }], selectionField: [{ position: 10 }] }
+  RateSheetNumber;
+
+  @UI: { lineItem: [{ position: 20, importance: #HIGH }], identification: [{ position: 20 }], selectionField: [{ position: 20 }] }
+  PurchaseRequisition;
+
+  @UI: { lineItem: [{ position: 30, importance: #HIGH }], identification: [{ position: 30 }], selectionField: [{ position: 30 }] }
+  PurchReqItem;
+
+  @UI: { lineItem: [{ position: 40, importance: #HIGH }], identification: [{ position: 40 }], selectionField: [{ position: 40 }] }
+  Plant;
+
+  @UI: { lineItem: [{ position: 50, importance: #HIGH }], identification: [{ position: 50 }] }
+  Material;
+
+  @UI: { lineItem: [{ position: 60 }], identification: [{ position: 60 }] }
+  RequestedQuantity;
+
+  @UI.hidden: true
+  BaseUoM;
+
+  @UI: {
+    lineItem: [{ position: 70 }],
+    identification: [{ position: 70 }]
+  }
+  ReferenceRateSheetNumber;
+
+  @UI: { lineItem: [{ position: 80, importance: #HIGH }], identification: [{ position: 80 }] }
+  OverallStatus;
+
+  @UI.hidden: true
+  Currency;
+
+  @UI: { identification: [{ position: 90 }] }
+  PurchasingOrg;
+
+  @UI: { identification: [{ position: 100 }] }
+  RateSheetDate;
+
+  @UI.hidden: true
+  BomExplodedAt;
+
+  @UI.hidden: true
+  BomCheckAck;
+
+  @UI.hidden: true
+  CreatedBy;
+
+  @UI.hidden: true
+  CreatedAt;
+
+  @UI.hidden: true
+  LastChangedBy;
+
+  @UI.hidden: true
+  LastChangedAt;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+}

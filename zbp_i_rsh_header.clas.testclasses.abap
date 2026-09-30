@@ -1,0 +1,134 @@
+CLASS ltc_ratesheet_unit_tests DEFINITION FINAL FOR TESTING
+  DURATION SHORT
+  RISK LEVEL HARMLESS.
+
+  PRIVATE SECTION.
+    METHODS:
+      test_kit_costing_formulas FOR TESTING,
+      test_raw_material_formulas FOR TESTING,
+      test_kit_rollup_formulas FOR TESTING,
+      test_rsno_format FOR TESTING,
+      test_raw_gst_permille_freight FOR TESTING,
+      test_pk_kit_rollup_additive FOR TESTING.
+
+ENDCLASS.
+
+CLASS ltc_ratesheet_unit_tests IMPLEMENTATION.
+
+  METHOD test_kit_costing_formulas.
+    DATA lv_pcwtgms TYPE zrsh_kit-pcwtgms VALUE 10.
+    DATA lv_ze31 TYPE zrsh_kit-ze31_pct VALUE 5.
+    DATA lv_qty TYPE zrsh_kit-qty VALUE 2.
+    DATA lv_rcost TYPE zrsh_kit-rcost VALUE '200.00'.
+    DATA lv_ze32 TYPE zrsh_kit-ze32_rate VALUE '50.00'.
+
+    DATA(lv_pcwtgross) = CONV zrsh_kit-pcwtgross( lv_pcwtgms + ( lv_pcwtgms * lv_ze31 / 100 ) ).
+    cl_abap_unit_assert=>assert_equals( exp = '10.500' act = lv_pcwtgross ).
+
+    DATA(lv_pcwtgorssbynos) = CONV zrsh_kit-pcwtgorssbynos( lv_qty * lv_pcwtgross ).
+    cl_abap_unit_assert=>assert_equals( exp = '21.000' act = lv_pcwtgorssbynos ).
+
+    DATA(lv_rcostperpc) = CONV zrsh_kit-rcostperpc( ( lv_rcost * lv_pcwtgorssbynos ) / 1000 ).
+    cl_abap_unit_assert=>assert_equals( exp = '4.20' act = lv_rcostperpc ).
+
+    DATA(lv_mcostperpc) = CONV zrsh_kit-mcostperpc( ( lv_pcwtgms * lv_ze32 ) / 1000 ).
+    cl_abap_unit_assert=>assert_equals( exp = '0.50' act = lv_mcostperpc ).
+
+    DATA(lv_mcostperset) = CONV zrsh_kit-mcostperset( lv_mcostperpc * lv_qty ).
+    cl_abap_unit_assert=>assert_equals( exp = '1.00' act = lv_mcostperset ).
+
+    DATA(lv_prodcost) = CONV zrsh_kit-productcostperpc( lv_mcostperset + lv_rcostperpc ).
+    cl_abap_unit_assert=>assert_equals( exp = '5.20' act = lv_prodcost ).
+  ENDMETHOD.
+
+  METHOD test_raw_material_formulas.
+    DATA lv_basic TYPE zrsh_raw-basic_rate VALUE '100.00'.
+    DATA lv_igst_pct TYPE zrsh_raw-igst_pct VALUE 18.
+    DATA lv_loc_ben TYPE zrsh_raw-local_benefit VALUE '2.00'.
+    DATA lv_ze35 TYPE zrsh_raw-ze35_pct VALUE 10.
+    DATA lv_col TYPE zrsh_raw-colouring VALUE '1.20'.
+
+    DATA(lv_igst_amt) = CONV zrsh_raw-igst_amt( lv_basic * ( lv_igst_pct / 100 ) ).
+    cl_abap_unit_assert=>assert_equals( exp = '18.00' act = lv_igst_amt ).
+
+    DATA(lv_tax_val) = lv_igst_amt.
+    DATA(lv_total_price) = CONV zrsh_raw-total_cost( lv_basic + lv_tax_val ).
+    cl_abap_unit_assert=>assert_equals( exp = '118.00' act = lv_total_price ).
+
+    DATA(lv_modvat) = lv_tax_val.
+    DATA(lv_net_landed) = CONV zrsh_raw-net_landed( lv_total_price - lv_modvat - lv_loc_ben ).
+    cl_abap_unit_assert=>assert_equals( exp = '98.00' act = lv_net_landed ).
+
+    DATA(lv_basic_mat) = CONV zrsh_raw-basic_material( lv_net_landed * ( lv_ze35 / 100 ) ).
+    cl_abap_unit_assert=>assert_equals( exp = '9.80' act = lv_basic_mat ).
+
+    DATA(lv_net_cost) = CONV zrsh_raw-net_cost( lv_basic_mat + lv_col ).
+    cl_abap_unit_assert=>assert_equals( exp = '11.00' act = lv_net_cost ).
+  ENDMETHOD.
+
+  METHOD test_kit_rollup_formulas.
+    DATA lv_original_basic TYPE zrsh_itm-basic_rate VALUE '50.00'.
+    DATA lv_tax_val TYPE zrsh_itm-tax_value VALUE '9.00'.
+    DATA lv_modvat TYPE zrsh_itm-modvat VALUE '9.00'.
+    DATA lv_qty TYPE zrsh_itm-vendor_order_qty VALUE 10.
+    DATA lv_kit_cost TYPE zrsh_kit-productcostperkit VALUE '45.00'.
+
+    DATA(lv_quoted) = lv_original_basic.
+    DATA(lv_new_basic) = CONV zrsh_itm-basic_rate( lv_kit_cost ).
+    DATA(lv_new_total_price) = CONV zrsh_itm-total_price( lv_new_basic + lv_tax_val ).
+    DATA(lv_new_total_cost) = CONV zrsh_itm-total_cost( lv_new_total_price - lv_modvat ).
+    DATA(lv_new_total_val) = CONV zrsh_itm-total_value( lv_qty * lv_new_total_price ).
+    DATA(lv_new_avg_rate) = CONV zrsh_itm-average_rate( lv_new_total_val / lv_qty ).
+
+    cl_abap_unit_assert=>assert_equals( exp = '45.00' act = lv_new_basic ).
+    cl_abap_unit_assert=>assert_equals( exp = '50.00' act = lv_quoted ).
+    cl_abap_unit_assert=>assert_equals( exp = '54.00' act = lv_new_total_price ).
+    cl_abap_unit_assert=>assert_equals( exp = '45.00' act = lv_new_total_cost ).
+    cl_abap_unit_assert=>assert_equals( exp = '540.00' act = lv_new_total_val ).
+    cl_abap_unit_assert=>assert_equals( exp = '54.00' act = lv_new_avg_rate ).
+  ENDMETHOD.
+
+  METHOD test_rsno_format.
+    DATA lv_pr TYPE i_purchaserequisitionitemapi01-purchaserequisition VALUE '10000000'.
+    DATA lv_item TYPE i_purchaserequisitionitemapi01-purchaserequisitionitem VALUE '00010'.
+
+    DATA(lv_rsno) = |{ lv_pr }{ lv_item }|.
+    cl_abap_unit_assert=>assert_equals( exp = '1000000000010' act = lv_rsno ).
+    cl_abap_unit_assert=>assert_equals( exp = 13 act = strlen( lv_rsno ) ).
+  ENDMETHOD.
+
+  METHOD test_raw_gst_permille_freight.
+    " P-102: legacy level-3 - GST condition value is per mille (KBETR / 10);
+    " Total Price includes ZE20 freight + ZE33 handling.
+    DATA lv_basic TYPE zrsh_raw-basic_rate VALUE '100.00'.
+    DATA lv_cond  TYPE zrsh_raw-igst_pct VALUE 180.
+    DATA lv_frt   TYPE zrsh_raw-freight VALUE '5.00'.
+    DATA lv_hand  TYPE zrsh_raw-handling VALUE '2.00'.
+
+    DATA(lv_igst_pct) = CONV zrsh_raw-igst_pct( lv_cond / 10 ).
+    DATA(lv_igst_amt) = CONV zrsh_raw-igst_amt( lv_basic * ( lv_igst_pct / 100 ) ).
+    DATA(lv_total_price) = CONV zrsh_raw-total_cost( lv_basic + lv_igst_amt + lv_frt + lv_hand ).
+    DATA(lv_total_cost) = CONV zrsh_raw-total_cost( lv_total_price - lv_igst_amt ).
+
+    cl_abap_unit_assert=>assert_equals( exp = '18.00'  act = lv_igst_pct ).
+    cl_abap_unit_assert=>assert_equals( exp = '18.00'  act = lv_igst_amt ).
+    cl_abap_unit_assert=>assert_equals( exp = '125.00' act = lv_total_price ).
+    cl_abap_unit_assert=>assert_equals( exp = '107.00' act = lv_total_cost ).
+  ENDMETHOD.
+
+  METHOD test_pk_kit_rollup_additive.
+    " P-102: legacy PARK (PK001-PK008) - KBETR += SUM( PRODUCTCOSTPERPC ) of ticked kit rows
+    DATA lv_quoted TYPE zrsh_itm-basic_rate VALUE '50.00'.
+    DATA lt_pc TYPE STANDARD TABLE OF zrsh_kit-productcostperpc WITH EMPTY KEY.
+    lt_pc = VALUE #( ( CONV #( '5.20' ) ) ( CONV #( '3.30' ) ) ).
+
+    DATA(lv_sum) = CONV zrsh_itm-basic_rate( 0 ).
+    LOOP AT lt_pc INTO DATA(lv_pc).
+      lv_sum += lv_pc.
+    ENDLOOP.
+
+    DATA(lv_new_basic) = CONV zrsh_itm-basic_rate( lv_quoted + lv_sum ).
+    cl_abap_unit_assert=>assert_equals( exp = '58.50' act = lv_new_basic ).
+  ENDMETHOD.
+
+ENDCLASS.

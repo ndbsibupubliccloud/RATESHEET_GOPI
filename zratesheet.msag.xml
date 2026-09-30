@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZRATESHEET</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Rate Sheet Application Messages</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Purchase Requisition &amp;1 item &amp;2 is deleted</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Purchase Requisition &amp;1 item &amp;2 is completed/closed</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Reference material mismatch for rate sheet &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>Duplicate rate sheet exists for PR &amp;1 item &amp;2</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>Over-allocation detected for component &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>006</MSGNR>
+     <TEXT>Quantity locked by contract &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>007</MSGNR>
+     <TEXT>No valid price found for component &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>008</MSGNR>
+     <TEXT>No tax code found for component &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>009</MSGNR>
+     <TEXT>Exactly one row must be selected for costing (TICK2)</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>010</MSGNR>
+     <TEXT>BOM has changed since last explosion - acknowledge required</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>011</MSGNR>
+     <TEXT>Requested quantity is zero</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>012</MSGNR>
+     <TEXT>No BOM found for material &amp;1 plant &amp;2</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>013</MSGNR>
+     <TEXT>Unsaved manual lines exist - use Save More Line first</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>014</MSGNR>
+     <TEXT>UoM conversion not possible for component &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>015</MSGNR>
+     <TEXT>Currency conversion not possible for &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>016</MSGNR>
+     <TEXT>No eligible vendor found for component &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>017</MSGNR>
+     <TEXT>ZE31/ZE32 condition missing for component &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>018</MSGNR>
+     <TEXT>Rate sheet is locked by user &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>019</MSGNR>
+     <TEXT>Rate sheet recreated, all line items were discarded</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>020</MSGNR>
+     <TEXT>Contract creation stub only - see Q-038</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>021</MSGNR>
+     <TEXT>Selections copied from reference rate sheet &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>BOM unchanged since last explosion for rate sheet &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>023</MSGNR>
+     <TEXT>Reference Rate Sheet Number is blank</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>024</MSGNR>
+     <TEXT>Reference rate sheet &amp;1 not found</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>025</MSGNR>
+     <TEXT>Plant &amp;1 not enabled for automatic contract creation</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZRATESHEET</ARBGB>
+     <MSGNR>026</MSGNR>
+     <TEXT>Sum of Vend. Ord. Qty (&amp;1) does not equal Qty Required (&amp;2) for &amp;3</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

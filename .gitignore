@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Python & Cache
+__pycache__/
+*.pyc
+.mypy_cache/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment & Local overrides
+.env
+.env.local
+.scp/
+
+# Local UI5 preview config containing SAP credentials (never commit)
+frontend/ui5-local-auth.yaml
+frontend/ui5-auth.yaml
+
+# Office lock files
+~$*
+
+# Local artifacts (packaged zip, agent screenshots)
+frontend-code.zip
+postqode-screenshots/

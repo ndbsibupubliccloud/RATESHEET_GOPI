@@ -1,0 +1,5 @@
+@EndUserText.label: 'Rate Sheet Header - Access Control'
+@MappingRole: true
+define role ZI_RSH_HEADER {
+  grant select on ZI_RSH_HEADER;
+}

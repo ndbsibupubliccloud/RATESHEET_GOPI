@@ -1,0 +1,123 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'Rate Sheet Item',
+    typeNamePlural: 'Rate Sheet Items',
+    title: { type: #STANDARD, value: 'BomComponent' }
+  }
+}
+annotate view ZC_RSH_ITEM with
+{
+  @UI.facet: [
+    { id: 'idItemGeneral', type: #IDENTIFICATION_REFERENCE, label: 'Main Grid Detail', position: 10 },
+    { id: 'idKitItems', purpose: #STANDARD, type: #LINEITEM_REFERENCE, label: 'BOM Within BOM', position: 20, targetElement: '_KitCostingItem' }
+  ]
+
+  @UI.hidden: true
+  RateSheetItemUUID;
+  @UI.hidden: true
+  RateSheetUUID;
+
+  @UI: { lineItem: [{ position: 10, label: 'SR NO' }], identification: [{ position: 10, label: 'SR NO' }] }
+  SrNo;
+
+  @UI: { lineItem: [{ position: 20, label: 'BOM' }], identification: [{ position: 20, label: 'BOM' }] }
+  BomStatus;
+
+  @UI: { lineItem: [{ position: 30, label: 'BOM Component' }], identification: [{ position: 30, label: 'BOM Component' }] }
+  BomComponent;
+
+  @UI: { lineItem: [{ position: 40, label: 'Vendor Code' }], identification: [{ position: 40, label: 'Vendor Code' }] }
+  VendorCode;
+
+  @UI: { lineItem: [{ position: 50, label: 'Vendor Name' }], identification: [{ position: 50, label: 'Vendor Name' }] }
+  VendorName;
+
+  @UI: { lineItem: [{ position: 60, label: 'Qty' }], identification: [{ position: 60, label: 'Qty' }] }
+  BomQty;
+
+  @UI: { lineItem: [{ position: 65, label: 'UOM' }], identification: [{ position: 65, label: 'UOM' }] }
+  BomUoM;
+
+  @UI: { lineItem: [{ position: 70, label: 'Tick' }], identification: [{ position: 70, label: 'Tick' }] }
+  IsIncluded;
+
+  @UI: { lineItem: [{ position: 75, label: 'Qty Required' }], identification: [{ position: 75, label: 'Qty Required' }] }
+  QtyRequired;
+
+  @UI: { lineItem: [{ position: 80, label: 'Vend. Ord. Qty' }], identification: [{ position: 80, label: 'Vend. Ord. Qty' }] }
+  VendorOrderQty;
+
+  @UI.hidden: true
+  Currency;
+
+  @UI: { lineItem: [{ position: 90, label: 'Basic Rate' }], identification: [{ position: 90, label: 'Basic Rate' }] }
+  BasicRate;
+
+  @UI: { lineItem: [{ position: 100, label: 'IGST %' }], identification: [{ position: 100, label: 'IGST %' }] }
+  IgstPct;
+  @UI: { lineItem: [{ position: 101, label: 'IGST AMT. IN RS.' }], identification: [{ position: 101, label: 'IGST AMT. IN RS.' }] }
+  IgstAmt;
+  @UI: { lineItem: [{ position: 102, label: 'CGST %' }], identification: [{ position: 102, label: 'CGST %' }] }
+  CgstPct;
+  @UI: { lineItem: [{ position: 103, label: 'CGST AMT. IN RS.' }], identification: [{ position: 103, label: 'CGST AMT. IN RS.' }] }
+  CgstAmt;
+  @UI: { lineItem: [{ position: 104, label: 'SGST %' }], identification: [{ position: 104, label: 'SGST %' }] }
+  SgstPct;
+  @UI: { lineItem: [{ position: 105, label: 'SGST AMT. IN RS.' }], identification: [{ position: 105, label: 'SGST AMT. IN RS.' }] }
+  SgstAmt;
+  @UI: { lineItem: [{ position: 106, label: 'UGST %' }], identification: [{ position: 106, label: 'UGST %' }] }
+  UgstPct;
+  @UI: { lineItem: [{ position: 107, label: 'UGST AMT. IN RS.' }], identification: [{ position: 107, label: 'UGST AMT. IN RS.' }] }
+  UgstAmt;
+
+  @UI: { lineItem: [{ position: 110, label: 'Total Price' }], identification: [{ position: 110, label: 'Total Price' }] }
+  TotalPrice;
+
+  @UI: { lineItem: [{ position: 120, label: 'Pay Day' }], identification: [{ position: 120, label: 'Pay Day' }] }
+  PayDay;
+
+  @UI: { lineItem: [{ position: 130, label: 'Modvat' }], identification: [{ position: 130, label: 'Modvat' }] }
+  Modvat;
+
+  @UI: { lineItem: [{ position: 140, label: 'Total Cost' }], identification: [{ position: 140, label: 'Total Cost' }] }
+  TotalCost;
+
+  @UI: { lineItem: [{ position: 150, label: 'Total Value' }], identification: [{ position: 150, label: 'Total Value' }] }
+  TotalValue;
+
+  @UI: { lineItem: [{ position: 160, label: 'Average' }], identification: [{ position: 160, label: 'Average' }] }
+  AverageRate;
+
+  @UI.hidden: true
+  IsManualLine;
+  @UI.hidden: true
+  ManualText;
+  @UI.hidden: true
+  ItemStatus;
+  @UI.hidden: true
+  BomItemNode;
+  @UI.hidden: true
+  BomDriftStatus;
+  @UI.hidden: true
+  QuotedBasicRate;
+  @UI.hidden: true
+  IsRateFromKit;
+  @UI.hidden: true
+  TaxCode;
+  @UI.hidden: true
+  InfoRecord;
+  @UI.hidden: true
+  IsAvgRateRow;
+  @UI.hidden: true
+  ContractNo;
+
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LastChangedAt;
+}

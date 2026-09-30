@@ -1,0 +1,5 @@
+@EndUserText.label: 'Rate Sheet Header Projection - Access Control'
+@MappingRole: true
+define role ZC_RSH_HEADER {
+  grant select on ZC_RSH_HEADER;
+}

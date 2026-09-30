@@ -1,0 +1,101 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'Rate Sheet - KIT',
+    typeNamePlural: 'Rate Sheet - KIT',
+    title: { type: #STANDARD, value: 'BomComponent' }
+  }
+}
+annotate view ZC_RSH_KIT with
+{
+  @UI.facet: [
+    { id: 'idKitGeneral', type: #IDENTIFICATION_REFERENCE, label: 'Kit Costing', position: 10 },
+    { id: 'idRawItems', purpose: #STANDARD, type: #LINEITEM_REFERENCE, label: 'BOM Within BOM', position: 20, targetElement: '_RawMaterialCostingItem' }
+  ]
+
+  @UI.hidden: true
+  KitCostingUUID;
+  @UI.hidden: true
+  RateSheetItemUUID;
+  @UI.hidden: true
+  RateSheetUUID;
+
+  @UI: { lineItem: [{ position: 5, label: 'Tick' }], identification: [{ position: 5, label: 'Tick' }] }
+  IsSelectedComponent;
+
+  @UI: { lineItem: [{ position: 10, label: 'SR NO' }], identification: [{ position: 10, label: 'SR NO' }] }
+  SrNo;
+
+  @UI: { lineItem: [{ position: 20, label: 'BOM Component' }], identification: [{ position: 20, label: 'BOM Component' }] }
+  BomComponent;
+
+  @UI: { lineItem: [{ position: 30, label: 'Qty' }], identification: [{ position: 30, label: 'Qty' }] }
+  Qty;
+
+  @UI: { lineItem: [{ position: 40, label: 'UOM' }], identification: [{ position: 40, label: 'UOM' }] }
+  UoM;
+
+  @UI: { lineItem: [{ position: 50, label: 'Qty Required' }], identification: [{ position: 50, label: 'Qty Required' }] }
+  QtyRequired;
+
+  @UI: { lineItem: [{ position: 60, label: 'Vendor ord. Qty' }], identification: [{ position: 60, label: 'Vendor ord. Qty' }] }
+  VendorOrderQty;
+
+  @UI.hidden: true
+  Currency;
+
+  @UI: { lineItem: [{ position: 70, label: 'PCWTGMS' }], identification: [{ position: 70, label: 'PCWTGMS' }] }
+  Pcwtgms;
+
+  @UI: { lineItem: [{ position: 80, label: 'PCWTGROSS' }], identification: [{ position: 80, label: 'PCWTGROSS' }] }
+  Pcwtgross;
+
+  @UI: { lineItem: [{ position: 90, label: 'PCWTGROSSBYNOs' }], identification: [{ position: 90, label: 'PCWTGROSSBYNOs' }] }
+  Pcwtgorssbynos;
+
+  @UI: { lineItem: [{ position: 100, label: 'RM COST' }], identification: [{ position: 100, label: 'RM COST' }] }
+  Rcost;
+
+  @UI: { lineItem: [{ position: 110, label: 'RMRCOSTPERPC' }], identification: [{ position: 110, label: 'RMRCOSTPERPC' }] }
+  Rcostperpc;
+
+  @UI: { lineItem: [{ position: 120, label: 'MCOSTPERPC' }], identification: [{ position: 120, label: 'MCOSTPERPC' }] }
+  Mcostperpc;
+
+  @UI: { lineItem: [{ position: 130, label: 'MCOSTPERSET' }], identification: [{ position: 130, label: 'MCOSTPERSET' }] }
+  Mcostperset;
+
+  @UI: { lineItem: [{ position: 140, label: 'PRODUCTCOSTPERPC' }], identification: [{ position: 140, label: 'PRODUCTCOSTPERPC' }] }
+  Productcostperpc;
+
+  @UI: { lineItem: [{ position: 150, label: 'PRODUCTCOSTPERKIT' }], identification: [{ position: 150, label: 'PRODUCTCOSTPERKIT' }] }
+  Productcostperkit;
+
+  @UI: { lineItem: [{ position: 160, label: 'Local Benefit (ref. only)' }], identification: [{ position: 160, label: 'Local Benefit (ref. only)' }] }
+  LocalFreight;
+
+  @UI.hidden: true
+  FormType;
+  @UI.hidden: true
+  FormConditionType;
+
+  @UI: { lineItem: [{ position: 170 }], identification: [{ position: 170 }] }
+  Ze31Pct;
+
+  @UI: { lineItem: [{ position: 180 }], identification: [{ position: 180 }] }
+  Ze32Rate;
+
+  @UI.hidden: true
+  WeightFactor;
+  @UI.hidden: true
+  HasFurtherBom;
+
+  @UI.hidden: true
+  CreatedBy;
+  @UI.hidden: true
+  CreatedAt;
+  @UI.hidden: true
+  LastChangedBy;
+  @UI.hidden: true
+  LastChangedAt;
+}
