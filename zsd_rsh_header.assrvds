@@ -1,0 +1,9 @@
+@EndUserText.label: 'Rate Sheet Service'
+define service ZSD_RSH_HEADER
+  provider contracts odata_v4_ui
+{
+  expose ZC_RSH_HEADER as RateSheetHeader;
+  expose ZC_RSH_ITEM as RateSheetItem;
+  expose ZC_RSH_KIT as KitCostingItem;
+  expose ZC_RSH_RAW as RawMaterialCostingItem;
+}

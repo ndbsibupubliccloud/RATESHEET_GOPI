@@ -1,0 +1,55 @@
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Rate Sheet Item - Projection'
+@Metadata.allowExtensions: true
+define view entity ZC_RSH_ITEM
+  as projection on ZI_RSH_ITEM
+{
+  key RateSheetItemUUID,
+      RateSheetUUID,
+      SrNo,
+      BomStatus,
+      ContractNo,
+      BomComponent,
+      BomUoM,
+      BomQty,
+      QtyRequired,
+      VendorCode,
+      VendorName,
+      VendorOrderQty,
+      Currency,
+      BasicRate,
+      IgstPct,
+      IgstAmt,
+      CgstPct,
+      CgstAmt,
+      SgstPct,
+      SgstAmt,
+      UgstPct,
+      UgstAmt,
+      TaxValue,
+      TotalPrice,
+      PayDay,
+      Modvat,
+      TotalCost,
+      TotalValue,
+      AverageRate,
+      IsIncluded,
+      IsManualLine,
+      ManualText,
+      ItemStatus,
+      BomItemNode,
+      BomDriftStatus,
+      QuotedBasicRate,
+      IsRateFromKit,
+      TaxCode,
+      InfoRecord,
+      IsAvgRateRow,
+
+      _Header : redirected to parent ZC_RSH_HEADER,
+      _KitCostingItem : redirected to composition child ZC_RSH_KIT,
+
+      CreatedBy,
+      CreatedAt,
+      LastChangedBy,
+      LastChangedAt
+}

@@ -1,0 +1,167 @@
+CLASS zcl_rsh_seed_data DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+    INTERFACES if_oo_adt_classrun .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+CLASS zcl_rsh_seed_data IMPLEMENTATION.
+
+  METHOD if_oo_adt_classrun~main.
+
+    " 1. Table ZRSH_APOPL
+    DATA lt_apopl TYPE TABLE OF zrsh_apopl.
+    APPEND VALUE #( plant = '1810' auto_contract_create = abap_true contract_number_prefix = '4600' ) TO lt_apopl.
+    APPEND VALUE #( plant = '1000' auto_contract_create = abap_false contract_number_prefix = '4600' ) TO lt_apopl.
+
+    MODIFY zrsh_apopl FROM TABLE @lt_apopl.
+    out->write( |ZRSH_APOPL: { sy-dbcnt } rows modified| ).
+
+    " 2. Table ZRSH_CONF
+    DATA lt_conf TYPE TABLE OF zrsh_conf.
+    APPEND VALUE #(
+      config_id                  = '0001'
+      default_purchasing_org     = '1810'
+      price_tie_break_rule       = 'L'
+      ze34_mode                  = 'F'
+      rollup_mode                = 'S'
+      weight_to_rate_uom_factor  = 1000
+      draft_lifetime_days        = 30
+    ) TO lt_conf.
+
+    MODIFY zrsh_conf FROM TABLE @lt_conf.
+    out->write( |ZRSH_CONF: { sy-dbcnt } rows modified| ).
+
+    " 3. Table ZRSH_COND (Set A - Legacy + Set B - TST Sandbox)
+    DATA lt_cond TYPE TABLE OF zrsh_cond.
+
+    " Set A: Legacy Production
+    APPEND VALUE #( condition_role = 'BASIC_RATE' condition_type = 'ZP00' description = 'Basic Price' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'IGST' condition_type = 'ZE01' description = 'Integrated GST (Legacy Type 1)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'IGST' condition_type = 'ZE02' description = 'Integrated GST (Legacy Type 2)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'IGST' condition_type = 'ZE43' description = 'Integrated GST (GST Era Type 1)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'IGST' condition_type = 'ZE47' description = 'Integrated GST (GST Era Type 2)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'CGST' condition_type = 'ZE05' description = 'Central GST (Legacy Type 1)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'CGST' condition_type = 'ZE06' description = 'Central GST (Legacy Type 2)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'CGST' condition_type = 'ZE42' description = 'Central GST (GST Era Type 1)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'CGST' condition_type = 'ZE46' description = 'Central GST (GST Era Type 2)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'SGST' condition_type = 'ZE10' description = 'State GST (Legacy Type 1)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'SGST' condition_type = 'ZE11' description = 'State GST (Legacy Type 2)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'SGST' condition_type = 'ZE41' description = 'State GST (GST Era Type 1)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'SGST' condition_type = 'ZE45' description = 'State GST (GST Era Type 2)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'UGST' condition_type = 'ZE44' description = 'Union Territory GST (Type 1)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'UGST' condition_type = 'ZE48' description = 'Union Territory GST (Type 2)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'FREIGHT' condition_type = 'ZE20' description = 'Freight Charges' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'WASTAGE_PCT' condition_type = 'ZE31' description = 'Wastage Percentage' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'MFG_RATE' condition_type = 'ZE32' description = 'Manufacturing Rate' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'HANDLING' condition_type = 'ZE33' description = 'Handling Charges' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'COLOURING' condition_type = 'ZE34' description = 'Colouring Charges' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'BASIC_MATERIAL_PCT' condition_type = 'ZE35' description = 'Basic Material Percentage' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'LOCAL_BENEFIT' condition_type = 'ZE40' description = 'Local Benefit' ) TO lt_cond.
+
+    " Set B: Sandbox TST Client 100
+    APPEND VALUE #( condition_role = 'BASIC_RATE' condition_type = 'PPR0' description = 'Default Gross Price' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'BASIC_RATE' condition_type = 'PB00' description = 'Gross Price' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'IGST' condition_type = 'JIIG' description = 'IN: Integrated GST' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'IGST' condition_type = 'JIIN' description = 'IN: Integrated GST-ND' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'IGST' condition_type = 'JOIG' description = 'IN: Integrated GST-OP' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'CGST' condition_type = 'JICG' description = 'IN: Central GST' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'CGST' condition_type = 'JICN' description = 'IN: Central GST - ND' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'CGST' condition_type = 'JOCG' description = 'IN: Central GST - OP' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'SGST' condition_type = 'JISG' description = 'IN: State GST' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'SGST' condition_type = 'JOSG' description = 'IN: State GST - OP' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'UGST' condition_type = 'JIUG' description = 'IN: Union Ter. GST' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'UGST' condition_type = 'JIUN' description = 'IN: UnionTer. GST-ND' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'UGST' condition_type = 'JOUG' description = 'IN: Union Ter. GST-OP' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'FREIGHT' condition_type = 'FRA1' description = 'Freight %' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'FREIGHT' condition_type = 'FRB1' description = 'Freight (Value)' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'FREIGHT' condition_type = 'FRC1' description = 'Freight/Quantity' ) TO lt_cond.
+    APPEND VALUE #( condition_role = 'FREIGHT' condition_type = 'FQU1' description = 'Freight/Quantity 1' ) TO lt_cond.
+
+    MODIFY zrsh_cond FROM TABLE @lt_cond.
+    out->write( |ZRSH_COND: { sy-dbcnt } rows modified| ).
+
+    " 4. Multi-vendor Purchasing Info Records (EINA & EINE)
+    DATA lt_eina TYPE TABLE OF eina.
+    DATA lt_eine TYPE TABLE OF eine.
+
+    " AVC_RBT_CNTRL_UNIT -> Vendor 0018300002 (Domestic IN Supplier 2), Rate 24,000 INR
+    APPEND VALUE #(
+      mandt = sy-mandt
+      infnr = '5300000021'
+      matnr = 'AVC_RBT_CNTRL_UNIT'
+      lifnr = '0018300002'
+      erdat = sy-datum
+      ernam = sy-uname
+      meins = 'ST'
+      lmein = 'ST'
+      umrez = 1
+      umren = 1
+      regio = 'AN'
+    ) TO lt_eina.
+
+    APPEND VALUE #(
+      mandt = sy-mandt
+      infnr = '5300000021'
+      ekorg = '1810'
+      esokz = '0'
+      werks = '1810'
+      erdat = sy-datum
+      ernam = sy-uname
+      waers = 'INR'
+      netpr = '24000.00'
+      peinh = 1
+      bprme = 'ST'
+      bpumz = 1
+      bpumn = 1
+      prdat = '99991231'
+    ) TO lt_eine.
+
+    " AVC_RBT_ROBOT -> Vendor 0018300002 (Domestic IN Supplier 2), Rate 48,000 INR
+    APPEND VALUE #(
+      mandt = sy-mandt
+      infnr = '5300000022'
+      matnr = 'AVC_RBT_ROBOT'
+      lifnr = '0018300002'
+      erdat = sy-datum
+      ernam = sy-uname
+      meins = 'ST'
+      lmein = 'ST'
+      umrez = 1
+      umren = 1
+      regio = 'AN'
+    ) TO lt_eina.
+
+    APPEND VALUE #(
+      mandt = sy-mandt
+      infnr = '5300000022'
+      ekorg = '1810'
+      esokz = '0'
+      werks = '1810'
+      erdat = sy-datum
+      ernam = sy-uname
+      waers = 'INR'
+      netpr = '48000.00'
+      peinh = 1
+      bprme = 'ST'
+      bpumz = 1
+      bpumn = 1
+      prdat = '99991231'
+    ) TO lt_eine.
+
+    MODIFY eina FROM TABLE @lt_eina.
+    out->write( |EINA: { sy-dbcnt } rows modified| ).
+
+    MODIFY eine FROM TABLE @lt_eine.
+    out->write( |EINE: { sy-dbcnt } rows modified| ).
+
+    COMMIT WORK.
+    out->write( |Data seeding completed successfully.| ).
+
+  ENDMETHOD.
+
+ENDCLASS.
